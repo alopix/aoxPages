@@ -1,0 +1,6 @@
+Exceptions:
+  - MySQLException (1000)
+  - ConfigException (2000)
+    * 1010: The given configID {$configID} does not exist.
+  - TemplateException (3000)
+  - 
