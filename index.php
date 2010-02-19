@@ -18,9 +18,10 @@
 require "config.php";
 require AOX_PATH . "/config_outline.php";
 require OUTLINE_CLASS_PATH . "/tpl.php";
-require AOX_PATH . "/lib/db/MySQL.class.php";
+require AOX_PATH . "/lib/AOXException.class.php";
 require AOX_PATH . "/lib/functions.php";
 require AOX_PATH . "/lib/Config.class.php";
+require AOX_PATH . "/lib/aoxPages.class.php";
 
 /**
  * __autoload function.
@@ -35,7 +36,15 @@ function __autoload($className) {
 	}
 }
 
+set_exception_handler('writeException');
+
 OutlineTpl::globalAssign('pageTitle', 'aoxPages Devel');
+
+try {
+	aoxPages::setDB($dbHost, $dbUser, $dbPassword, $dbName, $dbSystem);
+} catch (Exception $e) {
+	writeException($e);
+}
 
 try {
 	$_config = new Config();
