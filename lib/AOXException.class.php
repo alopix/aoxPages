@@ -52,6 +52,10 @@ class AOXException extends Exception {
 		"Line: " . $this->line;
 	}
 	
+	public function setExit($exit) {
+		$this->exit = (boolean) $exit;
+	}
+	
 	/**
 	 * shouldExit function.
 	 * 
