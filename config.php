@@ -17,9 +17,11 @@
  */
 // some database-configurations
 $dbHost = 'localhost';
-$dbUser = 'root';
-$dbPassword = '';
-$dbPrefix = '';
+$dbUser = 'user';
+$dbPassword = 'user';
+$dbName = 'aoxPages';
+$dbPrefix = 'pages_';
+$dbSystem = 'MySQL'; // possible values: MySQL, Mysqli
 
 // some admin-config
 $adminMail = 'root@localhost';
