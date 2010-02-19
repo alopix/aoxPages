@@ -15,19 +15,31 @@
  * 
  * Copyright (c) 2010
  */
+require AOX_PATH . "/lib/db/AbstractDB.class.php";
+
+class MySQLException extends AOXException { }
 
 /**
  * MySQL class.
  * 
  */
-class MySQL {
+class MySQL extends AbstractDB {
 	/**
-	 * connection
+	 * __construct function.
 	 * 
-	 * @var mixed
-	 * @access protected
+	 * @access public
+	 * @param mixed $host
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @param string $database. (default: '')
+	 * @return void
 	 */
-	protected $connection;
+	public function __construct($host, $username, $password) {
+		$this->connection = @mysql_connect($host, $username, $password);
+		if (!$this->connection) {
+			throw new MySQLException(mysql_error(), mysql_errno());
+		}
+	}
 	
 	/**
 	 * query function.
