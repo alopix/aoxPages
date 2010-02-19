@@ -1,6 +1,7 @@
 Exceptions:
   - DBException (3000)
     * 3001: The DBMS you chose ({$dbSystem}) is not valid.
+    * 3xxxx: errors from the original database-drivers (3 followed by errno)
     
   - ConfigException (1000)
     * 1010: The given configID {$configID} does not exist.

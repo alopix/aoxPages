@@ -16,6 +16,8 @@
  * Copyright (c) 2010
  */
 
+define('DB_ERRNO', 30000);
+
 /**
  * Abstract AbstractDB class.
  * 

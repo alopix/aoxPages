@@ -42,13 +42,13 @@ class MySQL extends AbstractDB {
 	public function __construct($host, $username, $password) {
 		$this->connection = @mysql_connect($host, $username, $password);
 		if (!$this->connection) {
-			throw new MySQLException(mysql_error(), mysql_errno());
+			throw new MySQLException(mysql_error(), DB_ERRNO + mysql_errno());
 		}
 	}
 	
 	public function setDatabase($name) {
 		if (!mysql_select_db($name, $this->connection)) {
-			throw new MySQLException(mysql_error(), mysql_errno());
+			throw new MySQLException(mysql_error(), DB_ERRNO + mysql_errno());
 		}
 	}
 	
@@ -66,7 +66,7 @@ class MySQL extends AbstractDB {
 		
 		$result = @mysql_query($sql, $this->connection);
 		if (!$result) {
-			throw new MySQLException(mysql_error(), mysql_errno());
+			throw new MySQLException(mysql_error(), DB_ERRNO + mysql_errno());
 		}
 		
 		return $result;
