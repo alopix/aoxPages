@@ -17,10 +17,11 @@
  */
 
 /**
- * AbstractDB class.
+ * Abstract AbstractDB class.
  * 
+ * @abstract
  */
-class AbstractDB {
+abstract class AbstractDB {
 	/**
 	 * connection
 	 * 
