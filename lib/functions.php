@@ -17,64 +17,6 @@
  */
 
 /**
- * AOXException class.
- * 
- * @extends Exception
- */
-class AOXException extends Exception {
-	protected $exit;
-	
-	/**
-	 * __construct function.
-	 * 
-	 * @access public
-	 * @param mixed $message
-	 * @param int $code. (default: 0)
-	 * @param bool $exit. (default: false)
-	 * @return void
-	 */
-	public function __construct($message, $code = 0, $exit = false) {
-		parent::__construct($message, $code);
-		$this->exit = $exit;
-	}
-	
-	/**
-	 * __toString function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function __toString() {
-		return "Exception: " . get_class($this) . "<br />\n" .
-		"Message: " . $this->message . "<br />\n" .
-		"File: " . $this->file . "<br />\n" .
-		"Line: " . $this->line;
-	}
-	
-	/**
-	 * shouldExit function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function shouldExit() {
-		return $this->exit;
-	}
-	
-	/**
-	 * doExit function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function doExit() {
-		if ($this->exit) {
-			exit;
-		}
-	}
-}
-
-/**
  * isValidModule function.
  * checks if a given module is installed
  * 
@@ -90,7 +32,7 @@ function isValidModule($moduleID, $enabled = false) {
 	if ($enabled) {
 		$sql .= "AND enabled = 1";
 	}
-	$db = new MySQL();
+	$db = aoxPages::getDB();
 	$query = $db->query($sql,
 											$moduleID);
 	return ($db->numRows($query) == 1) ? true : false;
@@ -117,7 +59,7 @@ function makeValidUrl($url) {
  * @return void
  */
 function isValidConfigID($configID) {
-	$db = new MySQL();
+	$db = aoxPages::getDB();
 	$query = $db->query("SELECT configID
 											FROM " . DB_PREFIX . "config
 											WHERE configID = %s",
