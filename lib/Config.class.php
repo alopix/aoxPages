@@ -71,7 +71,7 @@ class Config {
 		
 		if (self::isValidConfigID($configID)) {
 			$this->configID = $configID;
-			$db = new MySQL();
+			$db = aoxPages::getDB();
 			$query = $db->query("SELECT field, value
 													 FROM " . DB_PREFIX . "config
 													 WHERE configID = %s
@@ -81,7 +81,7 @@ class Config {
 			while ($row = $db->fetchAssoc($query)) {
 				$this->config[$row['field']] = $row['value'];
 			}
-			$db->free($query);
+			$db->freeResult($query);
 		} else {
 			throw new ConfigException('The given configID ' . $configID . ' does not exist.', 1010, true);
 		}
@@ -135,11 +135,13 @@ class Config {
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	public function setOption($key, $value) {
+	public function setOption($key, $value, $inTable = false) {
 		$result = NULL;
 		if (is_array($this->config) && array_key_exists($key, $this->config)) {
 			$result = $this->config[$key];
 		}
+		
+		$this->setDBOption($key, $value);
 		
 		$this->config[$key] = $value;
 		return $result;
@@ -154,12 +156,23 @@ class Config {
 	 * @return void
 	 */
 	protected static function isValidConfigID($configID) {
-	$db = aoxPages::getDB();
-	$query = $db->query("SELECT configID
-											FROM " . DB_PREFIX . "config
-											WHERE configID = %s",
-											(int)$configID);
-	return ($db->numRows($query) != 0) ? true : false;
-}
+		$db = aoxPages::getDB();
+		$query = $db->query(" SELECT configID
+													FROM " . DB_PREFIX . "config
+													WHERE configID = %s",
+													(int)$configID);
+		return ($db->numRows($query) != 0) ? true : false;
+	}
+	
+	protected function setDBOption($key, $value) {
+		$db = aoxPages::getDB();
+			$query = $db->query(" UPDATE " . DB_PREFIX . "config
+														SET value = '%s'
+														WHERE field = '%s'
+														AND configID = %d",
+														$value,
+														$key,
+														$this->configID);
+	}
 }
 ?>
