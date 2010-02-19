@@ -51,37 +51,24 @@ function makeValidUrl($url) {
 }
 
 /**
- * isValidConfigID function.
- * checks if a configID is valid
- * 
- * @access public
- * @param mixed $configID
- * @return void
- */
-function isValidConfigID($configID) {
-	$db = aoxPages::getDB();
-	$query = $db->query("SELECT configID
-											FROM " . DB_PREFIX . "config
-											WHERE configID = %s",
-											(int)$configID);
-	return ($db->numRows($query) == 1) ? true : false;
-}
-
-/**
  * writeException function.
- * echo a given Exception
  * 
  * @access public
  * @param mixed $exception
+ * @param mixed $exit. (default: NULL)
  * @return void
  */
-function writeException($exception) {
+function writeException($exception, $exit = NULL) {
 	require AOX_MODULE_PATH . "/ErrorModule.class.php";
 	$module = new ErrorModule();
 	$module->setTitle(get_class($exception));
 	$module->setMessage($exception);
 	$module->setRedirect(false);
 	$module->display();
+	
+	if ($exit !== NULL) {
+		$exception->setExit($exit);
+	}
 	
 	$exception->doExit();
 }

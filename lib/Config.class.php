@@ -69,7 +69,7 @@ class Config {
 	public function resetConfig($configID) {
 		$this->unsetConfig();
 		
-		if (isValidConfigID($configID)) {
+		if (self::isValidConfigID($configID)) {
 			$this->configID = $configID;
 			$db = new MySQL();
 			$query = $db->query("SELECT field, value
@@ -144,5 +144,22 @@ class Config {
 		$this->config[$key] = $value;
 		return $result;
 	}
+	
+	/**
+	 * isValidConfigID function.
+	 * checks if a configID is valid
+	 * 
+	 * @access public
+	 * @param mixed $configID
+	 * @return void
+	 */
+	protected static function isValidConfigID($configID) {
+	$db = aoxPages::getDB();
+	$query = $db->query("SELECT configID
+											FROM " . DB_PREFIX . "config
+											WHERE configID = %s",
+											(int)$configID);
+	return ($db->numRows($query) != 0) ? true : false;
+}
 }
 ?>
