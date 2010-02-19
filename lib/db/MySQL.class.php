@@ -17,6 +17,11 @@
  */
 require AOX_PATH . "/lib/db/AbstractDB.class.php";
 
+/**
+ * MySQLException class.
+ * 
+ * @extends AOXException
+ */
 class MySQLException extends AOXException { }
 
 /**
@@ -41,15 +46,30 @@ class MySQL extends AbstractDB {
 		}
 	}
 	
+	public function setDatabase($name) {
+		if (!mysql_select_db($name, $this->connection)) {
+			throw new MySQLException(mysql_error(), mysql_errno());
+		}
+	}
+	
 	/**
 	 * query function.
 	 * 
 	 * @access public
 	 * @param mixed $query
-	 * @return void
+	 * @return mixed
 	 */
 	public function query($query) {
+		$args = func_get_args();
+		array_shift($args);
+		$sql = vsprintf($query, $args);
 		
+		$result = @mysql_query($sql, $this->connection);
+		if (!$result) {
+			throw new MySQLException(mysql_error(), mysql_errno());
+		}
+		
+		return $result;
 	}
 	
 	/**
@@ -57,10 +77,10 @@ class MySQL extends AbstractDB {
 	 * 
 	 * @access public
 	 * @param mixed $result
-	 * @return void
+	 * @return integer
 	 */
 	public function numRows($result) {
-		
+		return @mysql_num_rows($result);
 	}
 }
 ?>
