@@ -82,5 +82,27 @@ class MySQL extends AbstractDB {
 	public function numRows($result) {
 		return @mysql_num_rows($result);
 	}
+	
+	/**
+	 * fetchAssoc function.
+	 * 
+	 * @access public
+	 * @param mixed $result
+	 * @return mixed
+	 */
+	public function fetchAssoc($result) {
+		return @mysql_fetch_assoc($result);
+	}
+	
+	/**
+	 * freeResult function.
+	 * 
+	 * @access public
+	 * @param mixed $result
+	 * @return void
+	 */
+	public function freeResult($result) {
+		mysql_free_result($result);
+	}
 }
 ?>
