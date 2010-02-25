@@ -50,5 +50,27 @@ abstract class AbstractModule {
 	 * @return void
 	 */
 	abstract public function display();
+	
+	/**
+	 * isValidModule function.
+	 * checks if a given module is installed
+	 * 
+	 * @access public
+	 * @param mixed $moduleID
+	 * @param bool $enabled. (default: false)
+	 * @return void
+	 */
+	public static function isValidModule($moduleID, $enabled = false) {
+		$sql = "SELECT moduleID
+						FROM " . DB_PREFIX . "module
+						WHERE moduleID = '%s'";
+		if ($enabled) {
+			$sql .= " AND enabled = 1";
+		}
+		$db = aoxPages::getDB();
+		$query = $db->query($sql,
+												$moduleID);
+		return ($db->numRows($query) == 1) ? true : false;
+	}
 }
 ?>

@@ -17,28 +17,6 @@
  */
 
 /**
- * isValidModule function.
- * checks if a given module is installed
- * 
- * @access public
- * @param mixed $moduleID
- * @param bool $enabled. (default: false)
- * @return void
- */
-function isValidModule($moduleID, $enabled = false) {
-	$sql = "SELECT moduleID
-					FROM " . DB_PREFIX . "module
-					WHERE moduleID = '%s'";
-	if ($enabled) {
-		$sql .= "AND enabled = 1";
-	}
-	$db = aoxPages::getDB();
-	$query = $db->query($sql,
-											$moduleID);
-	return ($db->numRows($query) == 1) ? true : false;
-}
-
-/**
  * makeValidUrl function.
  * checks if a given url is a valid absolute url
  * 
