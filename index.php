@@ -48,6 +48,8 @@ try {
 
 try {
 	$_config = new Config();
+	$configID = $_config->getOption('standardConfigID');
+	$_config->resetConfig($configID);
 } catch (Exception $e) {
 	writeException($e);
 }
@@ -58,7 +60,7 @@ if (empty($getModule)) {
 }
 
 $module = NULL;
-if (isValidModule($getModule, true) && is) {
+if (AbstractModule::isValidModule($getModule, true)) {
 	require AOX_MODULE_PATH . "/" . $getModule . ".class.php";
 	$module = new $getModule();
 } else {
