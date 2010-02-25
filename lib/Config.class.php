@@ -74,7 +74,7 @@ class Config {
 			$db = aoxPages::getDB();
 			$query = $db->query("SELECT field, value
 													 FROM " . DB_PREFIX . "config
-													 WHERE configID = %s
+													 WHERE configID = %d
 													 AND enabled = 1
 													 AND inTemplates = 1",
 													 $configID);
