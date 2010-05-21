@@ -41,14 +41,14 @@ class aoxPages {
 	 * @return void
 	 */
 	public static function setDB($dbHost, $dbUser, $dbPassword, $dbName, $dbSystem) {
-		if (file_exists(AOX_PATH . "/lib/db/" . $dbSystem . ".class.php")) {
-			require AOX_PATH . "/lib/db/" . $dbSystem . ".class.php";
-		}
-		if (!is_subclass_of($dbSystem, 'AbstractDB')) {
-			throw new AOXException("The DBMS you chose (" . $dbSystem . ") is not valid", 3001);
-		}
-		self::$db = new $dbSystem($dbHost, $dbUser, $dbPassword);
-		self::$db->setDatabase($dbName);
+		$options = array(
+			PDO::ATTR_PERSISTENT => true
+		);
+		try {
+			self::$db = new PDO($dbSystem . ':host=' . $dbHost . ';dbname=' . $dbName, $dbUser, $dbPassword, $options);
+		} catch (PDOException $e) {
+			throw new AOXException($e->getMessage(), $e->getCode());
+    }
 	}
 	
 	/**

@@ -72,16 +72,16 @@ class Config {
 		if (self::isValidConfigID($configID)) {
 			$this->configID = $configID;
 			$db = aoxPages::getDB();
-			$query = $db->query("SELECT field, value
+			$query = $db->prepare("SELECT field, value
 													 FROM " . DB_PREFIX . "config
-													 WHERE configID = %d
+													 WHERE configID = :configID
 													 AND enabled = 1
-													 AND inTemplates = 1",
-													 $configID);
-			while ($row = $db->fetchAssoc($query)) {
+													 AND inTemplates = 1");
+			$execute = array(':configID' => $configID);
+			$query->execute($execute);
+			foreach ($query AS $row) {
 				$this->config[$row['field']] = $row['value'];
 			}
-			$db->freeResult($query);
 		} else {
 			throw new ConfigException('The given configID ' . $configID . ' does not exist.', 1010, true);
 		}
@@ -157,11 +157,12 @@ class Config {
 	 */
 	protected static function isValidConfigID($configID) {
 		$db = aoxPages::getDB();
-		$query = $db->query(" SELECT configID
-													FROM " . DB_PREFIX . "config
-													WHERE configID = %s",
-													(int)$configID);
-		return ($db->numRows($query) != 0) ? true : false;
+		$query = $db->prepare(" SELECT COUNT(configID)
+														FROM " . DB_PREFIX . "config
+														WHERE configID = :configID");
+		$execute = array(':configID' => (int)$configID);
+		$query->execute($execute);
+		return ($query->rowCount() != 0) ? true : false;
 	}
 	
 	protected function setDBOption($key, $value) {
